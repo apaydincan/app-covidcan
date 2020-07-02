@@ -5,7 +5,11 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-RUN dotnet restore "Covidcan.csproj"
+WORKDIR /src
+COPY ["Covidcan/Covidcan.csproj", "Covidcan/"]
+RUN dotnet restore "Covidcan/Covidcan.csproj"
+COPY . .
+WORKDIR "/src/Covidcan"
 RUN dotnet build "Covidcan.csproj" -c Release -o /app/build
 
 FROM build AS publish
