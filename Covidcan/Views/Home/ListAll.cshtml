@@ -1,0 +1,46 @@
+﻿@model SummaryResponse
+@{
+    ViewData["Title"] = "Detaylı Liste";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table class="table table-bordered table-condensed table-hover">
+    <thead>
+        <tr>
+            <th>Ülke</th>
+            <th>G. Tarih</th>
+            <th>Y. Tespit Edilen</th>
+            <th>T. Tespit Edilen</th>
+            <th>Y. Ölüm</th>
+            <th>T. Ölüm</th>
+            <th>Y. İyileşen</th>
+            <th>T. İyileşen</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>~</td>
+            <td>@Model.Global.Date</td>
+            <td>@Model.Global.NewConfirmed</td>
+            <td>@Model.Global.TotalConfirmed</td>
+            <td>@Model.Global.NewDeaths</td>
+            <td>@Model.Global.TotalDeaths</td>
+            <td>@Model.Global.NewRecovered</td>
+            <td>@Model.Global.TotalRecovered</td>
+        </tr>
+        @{
+            foreach (var item in Model.Countries.ToList())
+            {
+                <tr>
+                    <td>@item.Country</td>
+                    <td>@item.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@item.NewConfirmed</td>
+                    <td>@item.TotalConfirmed</td>
+                    <td>@item.NewDeaths</td>
+                    <td>@item.TotalDeaths</td>
+                    <td>@item.NewRecovered</td>
+                    <td>@item.TotalRecovered</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

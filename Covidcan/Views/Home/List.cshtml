@@ -1,0 +1,30 @@
+﻿@model List<DailyCountryStatics>
+@{
+    ViewData["Title"] = "Detaylı Liste";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table class="table table-bordered table-condensed table-hover">
+    <thead>
+        <tr>
+            <th>Tarih</th>
+            <th>Tespit Edilen</th>
+            <th>İyileşen</th>
+            <th>Ölüm</th>
+            <th>Devam Eden</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ 
+            foreach(var item in Model.OrderByDescending(r => r.Date))
+            {
+                <tr>
+                    <td>@item.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@item.Confirmed</td>
+                    <td>@item.Recovered</td>
+                    <td>@item.Deaths</td>
+                    <td>@item.Active</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

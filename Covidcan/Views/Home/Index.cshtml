@@ -1,0 +1,54 @@
+﻿@model List<DailyCountryStatics>
+@{
+    ViewData["Title"] = "Genel Bakış";
+}
+<div id="countryStatsChart" style="height: 600px;">
+
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        am4core.ready(function () {
+            am4core.useTheme(am4themes_animated);
+            var chart = am4core.create("countryStatsChart", am4charts.XYChart);
+            chart.colors.step = 2;
+            chart.language.locale = am4lang_tr_TR;
+            chart.data = JSON.parse('@Html.Raw(JsonConvert.SerializeObject(Model.Select(r => new { r.Active, r.Confirmed, r.Deaths, r.Recovered, r.Date }).ToList()))');
+            var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            dateAxis.renderer.minGridDistance = 50;
+
+            function createAxisAndSeries(field, name, opposite, bullet, color) {
+
+                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                if (chart.yAxes.indexOf(valueAxis) != 0) {
+                    valueAxis.syncWithAxis = chart.yAxes.getIndex(0);
+                }
+
+                var series = chart.series.push(new am4charts.LineSeries());
+                series.dataFields.valueY = field;
+                series.dataFields.dateX = "Date";
+                series.strokeWidth = 2;
+                series.yAxis = valueAxis;
+                series.name = name;
+                series.tooltipText = "{name}: [bold]{valueY}[/]";
+                series.tensionX = 0.8;
+                series.showOnInit = true;
+                series.stroke = am4core.color(color);
+
+                valueAxis.renderer.line.strokeOpacity = 1;
+                valueAxis.renderer.line.strokeWidth = 2;
+                valueAxis.renderer.line.stroke = series.stroke;
+                valueAxis.renderer.labels.template.fill = series.stroke;
+                valueAxis.renderer.opposite = opposite;
+            }
+
+            createAxisAndSeries("Confirmed", "Tespit Edilen", false, "", "darkcyan");
+            createAxisAndSeries("Deaths", "Ölüm", false, "", "red");
+            createAxisAndSeries("Recovered", "İyileşen", true, "", "green");
+            createAxisAndSeries("Active", "Devam Eden", true, "", "orange");
+
+            chart.legend = new am4charts.Legend();
+            chart.cursor = new am4charts.XYCursor();
+
+        });
+    </script>
+}
