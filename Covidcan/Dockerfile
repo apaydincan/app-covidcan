@@ -8,7 +8,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Covidcan.csproj", "Covidcan/"]
 RUN dotnet restore "Covidcan/Covidcan.csproj"
-COPY . .
+COPY . ./
 WORKDIR "/src/Covidcan"
 RUN dotnet build "Covidcan.csproj" -c Release -o /app/build
 
